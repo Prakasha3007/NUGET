@@ -1,0 +1,19 @@
+name: MSBuild Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/msbuild-reusable.yml
+    with:
+      platform: "Any CPU"
+      configuration: "Release"
+      maxCpu: 8
+      clean: true
+      msbuildArguments: ""
+      createLogFile: true
+      logFileVerbosity: "detailed"
