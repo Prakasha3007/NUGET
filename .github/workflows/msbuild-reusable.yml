@@ -65,9 +65,6 @@ jobs:
       - name: Build Solution with MSBuild
         run: |
           $msbuildCmd = "msbuild `"$env:SOLUTION_PATH`" /p:Platform=`"${{ inputs.platform }}`" /p:Configuration=${{ inputs.configuration }} /m:${{ inputs.maxCpu }} ${{ inputs.msbuildArguments }}"
-          if (${{ inputs.clean }}) {
-            $msbuildCmd += " /t:Clean,Build"
-          }
           if (${{ inputs.createLogFile }}) {
             $logFile = "$env:BUILD_LOG.log"
             $msbuildCmd += " /fl /flp:logfile=`"$logFile`";verbosity=${{ inputs.logFileVerbosity }}"
