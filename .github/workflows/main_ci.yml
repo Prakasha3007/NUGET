@@ -1,7 +1,7 @@
 name: Main - CI
 
 on:
-  workflow_dispatch:
+  # workflow_dispatch:
   # Run it on main and release pushes too, in case we merge from a branch that's not up-to-date with the target branch
   # and breaks something after merge (or if we push to main).
   push:
