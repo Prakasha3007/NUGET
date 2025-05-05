@@ -111,7 +111,6 @@ jobs:
       - name: Run dotnet ${{ inputs.command }}
         shell: bash
         run: |
-          dotnet restore './.csprojfile/myproject.csproj'
           if [[ "${{ inputs.command }}" == "restore" ]]; then
             dotnet restore "${{ inputs.projects }}" \
               --configfile "${{ inputs.nugetConfigPath }}" \
