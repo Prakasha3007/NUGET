@@ -12,7 +12,7 @@ jobs:
     with:
       command: restore
       #projects: '**/*.csproj'
-      projects: './OrchardCore.Cms.Web/OrchardCore.Cms.Web.csproj'
+      projects: './src/OrchardCore.Cms.Web/OrchardCore.Cms.Web.csproj'
       nugetConfigPath: 'NuGet.config'
       arguments: ''
       packagesToPack: ''
@@ -37,5 +37,5 @@ jobs:
       patchVersion: '3'
       buildProperties: 'CommitId=abc123'
       verbosityPack: 'detailed'
-      workingDirectory: './src'
+      workingDirectory: '.'
  
