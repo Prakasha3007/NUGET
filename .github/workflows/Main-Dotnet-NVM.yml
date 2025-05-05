@@ -11,7 +11,8 @@ jobs:
     uses: ./.github/workflows/combined-reusable-Dotnet-NVM.yml
     with:
       command: restore
-      projects: '**/*.csproj'
+      #projects: '**/*.csproj'
+      projects: './.csprojFile/myproject.csproj'
       nugetConfigPath: 'NuGet.config'
       arguments: ''
       packagesToPack: ''
