@@ -12,7 +12,7 @@ jobs:
     with:
       command: restore
       #projects: '**/*.csproj'
-      projects: './csprojfile/myproject.csproj'
+      projects: 'src/OrchardCore.Cms.Web/OrchardCore.Cms.Web.csproj'
       nugetConfigPath: 'NuGet.config'
       arguments: ''
       packagesToPack: ''
