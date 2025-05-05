@@ -111,8 +111,6 @@ jobs:
       - name: Run dotnet ${{ inputs.command }}
         shell: bash
         run: |
-          pwd
-          Get-ChildItem -Path . -Recurse -Filter *.csproj
           if [[ "${{ inputs.command }}" == "restore" ]]; then
             dotnet restore "${{ inputs.projects }}" \
               --configfile "${{ inputs.nugetConfigPath }}" \
