@@ -10,7 +10,7 @@ jobs:
   restore-build-test:
     uses: ./.github/workflows/combined-reusable-Dotnet-NVM.yml
     with:
-      command: build
+      command: restore
       #projects: '**/*.csproj'
       projects: './src/OrchardCore.Cms.Web/OrchardCore.Cms.Web.csproj'
       nugetConfigPath: 'NuGet.config'
