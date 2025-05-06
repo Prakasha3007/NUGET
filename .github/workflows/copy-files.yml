@@ -1,0 +1,17 @@
+name: Call Copy Files for Windows
+on:
+  push:
+    #branches: [main, feature/dk*]
+    branches: main
+  workflow_dispatch:
+
+jobs:
+  copy-files-job:
+    uses: ./.github/workflows/reusable-copy-files.yaml
+    with:
+      SourceFolder: scripts
+      TargetFolder: templates
+      contents: '*.ps1'
+      CleanTargetFolder: true
+      OverWrite: true
+      FlattenFolders: false
