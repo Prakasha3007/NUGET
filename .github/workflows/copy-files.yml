@@ -9,8 +9,8 @@ jobs:
   copy-files-job:
     uses: ./.github/workflows/reusable-copy-files.yaml
     with:
-      SourceFolder: ./sourcefolder
-      TargetFolder: ./targetFolder
+      SourceFolder: sourcefolder
+      TargetFolder: targetFolder
       contents: '*.txt'
       CleanTargetFolder: true
       OverWrite: true
