@@ -7,7 +7,7 @@ on:
   workflow_dispatch:  
  
 jobs:
-  restore-build-test:
+  dotnet-nvm-npm-copy-files:
     uses: ./.github/workflows/combined-reusable-Dotnet-NVM.yml
     with:
       command: restore
@@ -46,4 +46,12 @@ jobs:
       verbose: true
       customCommand: "run build:fonts"
       customRegistry: "https://registry.npmjs.org/"
+      # Copy Files
+      SourceFolder: scripts
+      TargetFolder: templates
+      contents: '*.ps1'
+      CleanTargetFolder: true
+      OverWrite: true
+      FlattenFolders: false
+
  
