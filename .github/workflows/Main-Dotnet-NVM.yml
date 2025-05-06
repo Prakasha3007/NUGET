@@ -38,4 +38,6 @@ jobs:
       buildProperties: 'CommitId=abc123'
       verbosityPack: 'detailed'
       workingDirectory: '.'
+      #Use Nodes Version
+      version: '18*'
  
