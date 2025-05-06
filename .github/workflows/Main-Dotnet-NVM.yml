@@ -40,4 +40,9 @@ jobs:
       workingDirectory: '.'
       #Use Nodes Version
       version: '18*'
+      # NPM
+      workingDir: "."
+      verbose: true
+      customCommand: "run build:fonts"
+      customRegistry: "https://registry.npmjs.org/"
  
