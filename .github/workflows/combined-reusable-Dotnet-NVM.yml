@@ -106,8 +106,6 @@ on:
       customRegistry:
         required: false
         type: string
-  
-        
  
 jobs:
   dotnet:
@@ -219,38 +217,45 @@ jobs:
         
       - name: Install Dependencies
         run: npm install
-        shell: cmd
+        shell: powershell
 
       - name: Configure Custom Registry
         if: ${{ inputs.customRegistry != '' }}
         working-directory: ${{ inputs.workingDir }}
         run: |
-          echo registry=${{ inputs.customRegistry }} >> .npmrc
-        shell: cmd
+          $registry = '${{ inputs.customRegistry }}'
+          "registry=$registry" | Out-File -FilePath .npmrc -Encoding utf8 -Append
+        shell: powershell
 
       - name: Run NPM or Custom Command
         working-directory: ${{ inputs.workingDir }}
+        shell: powershell
         run: |
-          if "${{ inputs.command }}"=="install" "${{ inputs.command }}"=="publish" "${{ inputs.command }}"=="custom" (
-            if "${{ inputs.command }}"=="custom" (
-              if "${{ inputs.customCommand }}"=="" (
-                echo Error: customCommand input is required when command is "custom"
+          $cmd = '${{ inputs.command }}'
+          $verbose = '${{ inputs.verbose }}'
+          $custom = '${{ inputs.customCommand }}'
+       
+          if ($cmd -in @('install', 'publish', 'custom')) {
+            if ($cmd -eq 'custom') {
+              if ([string]::IsNullOrEmpty($custom)) {
+                Write-Error "Error: customCommand input is required when command is 'custom'"
                 exit 1
-              ) else (
-                echo Running Custom Command: ${{ inputs.customCommand }}
-                npm ${{ inputs.customCommand }}
-              )
-            ) else if "${{ inputs.verbose }}"=="true" (
-              echo Running npm ${{ inputs.command }} --verbose
-              npm ${{ inputs.command }} --verbose
-            ) else (
-              echo Running npm ${{ inputs.command }}
-              npm ${{ inputs.command }}
-            )
-            echo Node.js Version : && node -v
-          ) else (
-            echo Error: Unsupported command. Only "install", "publish", or "custom" are allowed.
+              } else {
+                Write-Host "Running Custom Command: $custom"
+                npm $custom
+              }
+            } elseif ($verbose -eq 'true') {
+              Write-Host "Running npm $cmd --verbose"
+              npm $cmd --verbose
+            } else {
+              Write-Host "Running npm $cmd"
+              npm $cmd
+            }
+       
+            Write-Host "Node.js Version:"
+            node -v
+          } else {
+            Write-Error "Error: Unsupported command '$cmd'. Only 'install', 'publish', or 'custom' are allowed."
             exit 1
-          )
-        shell: cmd
+          }
 
