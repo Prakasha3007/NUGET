@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>MyProject</AssemblyName>
+    <RootNamespace>MyProject</RootNamespace>
+
+    <!-- Packaging Metadata -->
+    <PackageId>MyProject</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>YourName</Authors>
+    <Description>A sample project</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/username/MyProject</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- NuGet Dependencies -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Files to Include in the Package -->
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>

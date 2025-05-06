@@ -1,0 +1,261 @@
+name: Combined-Dotnet-NVM-Reusable Workflow
+ 
+on:
+  workflow_call:
+    inputs:
+      command:
+        required: true
+        type: string
+      projects:
+        required: true
+        type: string
+      arguments:
+        required: false
+        type: string
+      nugetConfigPath:
+        required: true
+        type: string
+      packagesToPack:
+        required: true
+        type: string
+      configuration:
+        required: true
+        type: string
+      custom:
+        required: true
+        type: boolean
+      restoreArguments:
+        required: true
+        type: string
+      testRunTitle:
+        required: false
+        type: string
+      modifyOutputPath:
+        required: true
+        type: boolean
+      packDirectory:
+        required: true
+        type: string
+      nobuild:
+        required: true
+        type: boolean
+      includesymbols:
+        required: true
+        type: boolean
+      includesource:
+        required: true
+        type: boolean
+      requestTimeout:
+        required: false
+        type: string
+      noCache:
+        required: true
+        type: boolean
+      restoreDirectory:
+        required: true
+        type: string
+      verbosityRestore:
+        required: true
+        type: string
+      sensitiveAlphanumericInfo1:
+        required: true
+        type: string
+      versioningScheme:
+        required: false
+        type: string
+      versionEnvVar:
+        required: true
+        type: string
+      majorVersion:
+        required: true
+        type: string
+      minorVersion:
+        required: true
+        type: string
+      patchVersion:
+        required: true
+        type: string
+      buildProperties:
+        required: true
+        type: string
+      verbosityPack:
+        required: true
+        type: string
+      workingDirectory:
+        required: true
+        type: string
+        # Use Nodes Version
+      version:
+        required: true
+        type: string
+        # NPM 
+      npmcommand:
+        required: true
+        type: string
+      workingDir:
+        required: true
+        type: string
+        default: "."
+      verbose:
+        required: false
+        type: boolean
+        default: false
+      customCommand:
+        required: false
+        type: string
+      customRegistry:
+        required: false
+        type: string
+ 
+jobs:
+  dotnet:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.workingDirectory }}
+ 
+    env:
+      VERSION: ${{ inputs.majorVersion }}.${{ inputs.minorVersion }}.${{ inputs.patchVersion }}
+ 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+ 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.201'
+ 
+      - name: Set version env var (optional use)
+        shell: bash
+        run: echo "${{ inputs.versionEnvVar }}=$VERSION" >> $GITHUB_ENV
+ 
+      - name: Run dotnet ${{ inputs.command }}
+        shell: bash
+        run: |
+          if [[ "${{ inputs.command }}" == "restore" ]]; then
+            dotnet restore "${{ inputs.projects }}" \
+              --configfile "${{ inputs.nugetConfigPath }}" \
+              ${{ inputs.restoreArguments }} \
+              --no-cache="${{ inputs.noCache }}" \
+              --packages "${{ inputs.restoreDirectory }}" \
+              --verbosity "${{ inputs.verbosityRestore }}"
+ 
+          elif [[ "${{ inputs.command }}" == "build" ]]; then
+            dotnet build "${{ inputs.projects }}" ${{ inputs.arguments }}
+ 
+          elif [[ "${{ inputs.command }}" == "test" ]]; then
+            dotnet test "${{ inputs.projects }}" ${{ inputs.arguments }} \
+              --logger "trx;LogFileName=${{ inputs.testRunTitle }}.trx"
+ 
+          elif [[ "${{ inputs.command }}" == "pack" ]]; then
+            dotnet pack "${{ inputs.packagesToPack }}" \
+              --configuration "${{ inputs.configuration }}" \
+              --output "${{ inputs.packDirectory }}" \
+              --no-build="${{ inputs.nobuild }}" \
+              --include-symbols="${{ inputs.includesymbols }}" \
+              --include-source="${{ inputs.includesource }}" \
+              --property "Version=$VERSION;SensitiveAlphanumericInfo3=${{ inputs.sensitiveAlphanumericInfo1 }};${{ inputs.buildProperties }}" \
+              --verbosity "${{ inputs.verbosityPack }}"
+          fi
+
+      - name: Download NVM for Windows installer
+        run: |
+          Invoke-WebRequest https://github.com/coreybutler/nvm-windows/releases/download/1.2.2/nvm-noinstall.zip -OutFile nvm-noinstall.zip
+          Expand-Archive -Path "nvm-noinstall.zip" -DestinationPath "C:\nvm" -Force
+          Copy-Item "$PWD/settings.txt" "C:\nvm\settings.txt" -Force
+
+      - name: Set Environment Variables for NVM
+        run: |
+          echo "NVM_HOME=C:\nvm" >> $env:GITHUB_ENV
+          echo "NVM_SYMLINK=C:\nvm\nodejs" >> $env:GITHUB_ENV
+          echo "PATH=C:\nvm;C:\nvm\nodejs;$env:PATH" >> $env:GITHUB_ENV   
+
+      - name: Install Predefined Node Versions
+        run: |
+          C:\nvm\nvm.exe install 18.20.4
+          C:\nvm\nvm.exe install 18.19.1
+          C:\nvm\nvm.exe install 18.20.1
+          C:\nvm\nvm.exe install 16.13.0
+          C:\nvm\nvm.exe install 16.13.1
+          C:\nvm\nvm.exe install 16.16.0
+
+      - name: Check and Switch to Existing NVM Version
+        shell: powershell
+        run: |
+          $version = "${{ inputs.version }}".Trim()
+          if (-not $version) { 
+            Write-Error "Input version is empty. Please provide a valid Node.js version."
+            exit 1
+          }
+
+          $normalized = $version.TrimStart('v')
+          $installed = & nvm list | ForEach-Object {
+            ($_ -replace '[*>\s]', '').TrimStart('v')
+          } | Where-Object { $_ -match '^\d+\.\d+\.\d+$' }
+
+          Write-Host "Installed versions:"
+          $installed | ForEach-Object { Write-Host " - $_" }
+
+          $matches = if ($normalized -like '*`*') {
+            $prefix = $normalized.TrimEnd('*')
+            $installed | Where-Object { $_ -like "$prefix*" }
+          } else {
+            $installed | Where-Object { $_ -eq $normalized }
+          }
+
+          if (-not $matches) {
+            Write-Error "No installed Node.js version matches: $version"
+            exit 1
+          }
+
+          $selected = $matches | Sort-Object -Descending | Select-Object -First 1
+          Write-Host "Using Node.js version: $selected"
+
+          nvm use $selected
+          Write-Host "Node.js version in use: $(node -v)"   
+        
+      - name: Install Dependencies
+        run: npm install
+        shell: powershell
+
+      - name: Configure Custom Registry
+        if: ${{ inputs.customRegistry != '' }}
+        working-directory: ${{ inputs.workingDir }}
+        run: |
+          $registry = '${{ inputs.customRegistry }}'
+          "registry=$registry" | Out-File -FilePath .npmrc -Encoding utf8 -Append
+        shell: powershell
+
+      - name: Run NPM or Custom Command
+        working-directory: ${{ inputs.workingDir }}
+        shell: powershell
+        run: |
+          $cmd = '${{ inputs.npmcommand }}'
+          $verbose = '${{ inputs.verbose }}'
+          $custom = '${{ inputs.customCommand }}'
+       
+          if ($cmd -in @('install', 'publish', 'custom')) {
+            if ($cmd -eq 'custom') {
+              if ([string]::IsNullOrEmpty($custom)) {
+                Write-Error "Error: customCommand input is required when command is 'custom'"
+                exit 1
+              } else {
+                Write-Host "Running Custom Command: $custom"
+                npm $custom
+              }
+            } elseif ($verbose -eq 'true') {
+              Write-Host "Running npm $cmd --verbose"
+              npm $cmd --verbose
+            } else {
+              Write-Host "Running npm $cmd"
+              npm $cmd
+            }
+       
+            Write-Host "Node.js Version:"
+            node -v
+          } else {
+            Write-Error "Error: Unsupported command '$cmd'. Only 'install', 'publish', or 'custom' are allowed."
+            exit 1
+          }
+

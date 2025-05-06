@@ -1,0 +1,49 @@
+name: Dotnet Restore and NVM
+ 
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  
+ 
+jobs:
+  restore-build-test:
+    uses: ./.github/workflows/combined-reusable-Dotnet-NVM.yml
+    with:
+      command: build
+      #projects: '**/*.csproj'
+      projects: './src/OrchardCore.Cms.Web/OrchardCore.Cms.Web.csproj'
+      nugetConfigPath: 'NuGet.config'
+      arguments: ''
+      packagesToPack: ''
+      configuration: 'Release'
+      custom: true
+      restoreArguments: '--interactive'
+      testRunTitle: ''
+      modifyOutputPath: true
+      packDirectory: './custom_pack'
+      nobuild: true
+      includesymbols: true
+      includesource: true
+      requestTimeout: '180'
+      noCache: true
+      restoreDirectory: './restoredir'
+      verbosityRestore: 'minimal'
+      sensitiveAlphanumericInfo1: 'true'
+      versioningScheme: '1.0.0'
+      versionEnvVar: 'BUILD_VERSION'
+      majorVersion: '1'
+      minorVersion: '0'
+      patchVersion: '3'
+      buildProperties: 'CommitId=abc123'
+      verbosityPack: 'detailed'
+      workingDirectory: '.'
+      #Use Nodes Version
+      version: '18*'
+      # NPM
+      npmcommand: custom
+      workingDir: "."
+      verbose: true
+      customCommand: "run build:fonts"
+      customRegistry: "https://registry.npmjs.org/"
+ 
