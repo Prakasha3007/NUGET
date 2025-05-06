@@ -89,9 +89,9 @@ on:
         required: true
         type: string
         # NPM 
-      #command:
-        #required: true
-        #type: string
+      npmcommand:
+        required: true
+        type: string
       workingDir:
         required: true
         type: string
@@ -231,7 +231,7 @@ jobs:
         working-directory: ${{ inputs.workingDir }}
         shell: powershell
         run: |
-          $cmd = '${{ inputs.command }}'
+          $cmd = '${{ inputs.npmcommand }}'
           $verbose = '${{ inputs.verbose }}'
           $custom = '${{ inputs.customCommand }}'
        
