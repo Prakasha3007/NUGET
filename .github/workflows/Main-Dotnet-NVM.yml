@@ -42,7 +42,7 @@ jobs:
       version: '18*'
       # NPM
       npmcommand: custom
-      workingDir: "."
+      workingDir: "./npm-scripts"
       verbose: true
       customCommand: "run build:fonts"
       customRegistry: "https://registry.npmjs.org/"
