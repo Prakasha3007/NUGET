@@ -216,6 +216,7 @@ jobs:
           Write-Host "Node.js version in use: $(node -v)"   
         
       - name: Install Dependencies
+        working-directory: ${{ inputs.workingDir }}
         run: npm install
         shell: powershell
 
