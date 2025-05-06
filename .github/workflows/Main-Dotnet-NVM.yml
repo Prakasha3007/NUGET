@@ -41,6 +41,7 @@ jobs:
       #Use Nodes Version
       version: '18*'
       # NPM
+      npmcommand: custom
       workingDir: "."
       verbose: true
       customCommand: "run build:fonts"
