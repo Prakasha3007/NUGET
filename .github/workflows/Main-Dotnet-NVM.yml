@@ -47,11 +47,9 @@ jobs:
       customCommand: "run build:fonts"
       customRegistry: "https://registry.npmjs.org/"
       # Copy Files
-      SourceFolder: scripts
-      TargetFolder: templates
-      contents: '*.ps1'
+      SourceFolder: sourcefolder
+      TargetFolder: targetFolder
+      contents: '*.txt'
       CleanTargetFolder: true
       OverWrite: true
       FlattenFolders: false
-
- 
