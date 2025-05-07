@@ -102,7 +102,9 @@ jobs:
             # Copy files based on minimatch pattern
             Get-ChildItem -Path $source -Recurse -Include $contents | ForEach-Object {
                $sourceFile= $_.FullName
-               Write-Host "Over All Source File : $sourceFile "
+               #Write-Host "Over All Source File : $sourceFile "
+               Write-Host "Flatten value: $flatten"
+               Write-Host "Flatten type: $($flatten.GetType().Name)"
               if ($flatten) {
                 $destination = Join-Path -Path $target -ChildPath $_.Name
                 Write-Host "Inisde Flatten : $destination "
