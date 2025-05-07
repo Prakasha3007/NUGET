@@ -107,6 +107,7 @@ jobs:
                 $destination = Join-Path -Path $target -ChildPath $_.Name
                 Write-Host "Inisde Flatten : $destination "
               } else {
+                Write-Host "not in flatten folder inisde else "
                 $relativePath = $_.FullName.Substring($source.Length).TrimStart('\', '/')
                 $destination = Join-Path -Path $target -ChildPath $relativePath
               }
