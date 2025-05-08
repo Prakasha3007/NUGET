@@ -139,6 +139,65 @@ jobs:
         shell: pwsh
 
 
+      - name: Copy Files Second Time
+        run: |
+          try {
+            $source = Join-Path -Path "${{ github.workspace }}" -ChildPath "${{ inputs.SourceFolder }}"
+            $target = Join-Path -Path "${{ github.workspace }}" -ChildPath "${{ inputs.TargetFolder }}"
+            $contents = "${{ inputs.contents }}"
+            $overwrite = ${{ inputs.overwrite }}
+            $flatten = ${{ inputs.FlattenFolders }}
+
+            Write-Host "Source Path: $source"
+            Write-Host "Target Path: $target"
+            Write-Host "Contents to Copy: $contents"
+            Write-Host "overwrite : $overwrite"
+            Write-Host "flatten : $flatten"
+
+            # Ensure target folder exists
+            if (-not (Test-Path -Path $target)) {
+              Write-Host "Creating target folder: $target"
+              New-Item -ItemType Directory -Path $target | Out-Null
+            }
+
+            # Copy files based on minimatch pattern
+            Get-ChildItem -Path $source -Recurse -Include $contents | ForEach-Object {
+               $sourceFile= $_.FullName
+              #if ($flatten) {
+               if (${{ inputs.FlattenFolders }}){
+                $destination = Join-Path -Path $target -ChildPath $_.Name
+                Write-Host "Inisde Flatten : $destination "
+              } else {
+                $relativePath = $_.FullName.Substring($source.Length).TrimStart('\', '/')
+                $destination = Join-Path -Path $target -ChildPath $relativePath
+              }
+
+              Write-Host "Copying file: $sourceFile to $destination"
+
+              # Ensure destination folder exists
+              $destinationFolder = Split-Path -Path $destination -Parent
+              if (-not (Test-Path -Path $destinationFolder)) {
+                New-Item -ItemType Directory -Path $destinationFolder | Out-Null
+              }
+
+              # Copy the file
+               Write-Host "overwrite : $overwrite "
+              if ($overwrite -or -not (Test-Path -Path $destination)) {
+                Copy-Item -Path $sourceFile -Destination $destination -Force
+              }
+            }
+
+            Write-Host "File copy operation completed successfully."
+          } catch {
+            Write-Error "An error occurred during the file copy operation: $_"
+            exit 1
+          }
+
+          # Explicitly set exit code to 0 if no errors occurred
+          exit 0
+        shell: pwsh
+
+
       -  name: List Files in Target Folder
          run: |
            try {
