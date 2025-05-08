@@ -122,6 +122,7 @@ jobs:
               }
 
               # Copy the file
+               Write-Host "overwrite : $overwrite "
               if ($overwrite -or -not (Test-Path -Path $destination)) {
                 Copy-Item -Path $sourceFile -Destination $destination -Force
               }
@@ -136,20 +137,7 @@ jobs:
           # Explicitly set exit code to 0 if no errors occurred
           exit 0
         shell: pwsh
-    
-      - name: List Files in Target Folder
-        run: |
-             try {
-               $target = Join-Path -Path "${{ github.workspace }}" -ChildPath "${{ inputs.TargetFolder }}"
-               Write-Host "Listing files in target folder: $target"
-               Get-ChildItem -Path $target -Recurse | ForEach-Object {
-                 Write-Host $_.FullName
-               }
-             } catch {
-               Write-Error "An error occurred while listing files in the target folder: $_"
-               exit 1
-             }
-        shell: pwsh
+  
 
       - name: List Files in Target Folder
         run: |
