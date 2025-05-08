@@ -14,4 +14,4 @@ jobs:
       contents: '*.txt'
       CleanTargetFolder: true
       OverWrite: true
-      FlattenFolders: true
+      FlattenFolders: false
