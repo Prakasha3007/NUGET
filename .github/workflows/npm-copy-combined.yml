@@ -8,36 +8,26 @@ on:
 
 jobs:
   call-reusable:
-    runs-on: self-hosted
-    steps:
-      # Step 1: Execute the call-reusable reusable workflow
-      - name: Run NPM Task
-        #uses: ./.github/workflows/npm-reusable-workflow.yml
-        uses: Prakasha3007/NUGET/.github/workflows/npm-reusable-workflow.yml@main
-        with:
-          runsOn: self-hosted
-          command: "custom"
-          workingDir: "."
-          verbose: true
-          customCommand: "run build:fonts"
-          customRegistry: "https://registry.npmjs.org/"
+    uses: ./.github/workflows/npm-reusable-workflow.yml
+    with:
+      runsOn: self-hosted
+      command: "custom"
+      workingDir: "."
+      verbose: true
+      customCommand: "run build:fonts"
+      customRegistry: "https://registry.npmjs.org/"
 
   V2-Copy-Files:
-    runs-on: self-hosted
     needs: call-reusable
-    steps:
-      # Step 1: Execute the V2-Copy-Files reusable workflow
-      - name: Copy Files
-        #uses: ./.github/workflows/copy-reusable-workflow.yml
-        uses: Prakasha3007/NUGET/.github/workflows/copy-reusable-workflow.yml@main
-        with:
-          SourceFolder: sourcefolder
-          contents: '*.txt'
-          TargetFolder: targetFolder
-          CleanTargetFolder: true
-          overwrite: false
-          FlattenFolders: false
-          preserveTimestamp: false
-          retryCount: '3'
-          delayBetweenRetries: '5000'
-          ignoreMakeDirErrors: false
+    uses: ./.github/workflows/copy-reusable-workflow.yml
+    with:
+      SourceFolder: sourcefolder
+      contents: '*.txt'
+      TargetFolder: targetFolder
+      CleanTargetFolder: true
+      overwrite: false
+      FlattenFolders: false
+      preserveTimestamp: false
+      retryCount: '3'
+      delayBetweenRetries: '5000'
+      ignoreMakeDirErrors: false
