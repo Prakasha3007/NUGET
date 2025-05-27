@@ -64,8 +64,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      #- name: Checkout Repository
-        #uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
       - name: Task-Header
         run: |
           Write-Host "===================================================================================================="
