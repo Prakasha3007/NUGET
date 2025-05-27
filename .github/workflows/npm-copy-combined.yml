@@ -10,11 +10,7 @@ jobs:
   call-reusable:
     runs-on: self-hosted
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      # Step 2: Execute the call-reusable reusable workflow
+      # Step 1: Execute the call-reusable reusable workflow
       - name: Run NPM Task
         uses: ./.github/workflows/npm-reusable-workflow.yml
         with:
@@ -29,13 +25,9 @@ jobs:
     runs-on: self-hosted
     needs: call-reusable
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      # Step 2: Execute the V2-Copy-Files reusable workflow
+      # Step 1: Execute the V2-Copy-Files reusable workflow
       - name: Copy Files
-        uses: ./.github/workflows/combined-reusable-NVM.yml
+        uses: ./.github/workflows/copy-reusable-workflow.yml
         with:
           SourceFolder: sourcefolder
           contents: '*.txt'
