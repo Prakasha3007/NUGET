@@ -1,0 +1,49 @@
+name: Main Workflow with Two Jobs
+
+on:
+  push:
+    branches:
+      - main
+  #workflow_dispatch:
+
+jobs:
+  call-reusable:
+    runs-on: self-hosted
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Execute the call-reusable reusable workflow
+      - name: Run NPM Task
+        uses: ./.github/workflows/combined-reusable-NVM.yml
+        with:
+          runsOn: self-hosted
+          command: "custom"
+          workingDir: "."
+          verbose: true
+          customCommand: "run build:fonts"
+          customRegistry: "https://registry.npmjs.org/"
+
+  V2-Copy-Files:
+    runs-on: self-hosted
+    needs: call-reusable
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Execute the V2-Copy-Files reusable workflow
+      - name: Copy Files
+        uses: ./.github/workflows/combined-reusable-NVM.yml
+        with:
+          SourceFolder: sourcefolder
+          contents: '*.txt'
+          TargetFolder: targetFolder
+          CleanTargetFolder: true
+          overwrite: false
+          FlattenFolders: false
+          preserveTimestamp: false
+          retryCount: '3'
+          delayBetweenRetries: '5000'
+          ignoreMakeDirErrors: false
