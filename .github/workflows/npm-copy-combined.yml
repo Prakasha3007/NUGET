@@ -13,7 +13,7 @@ jobs:
       # Step 1: Execute the call-reusable reusable workflow
       - name: Run NPM Task
         #uses: ./.github/workflows/npm-reusable-workflow.yml
-        uses: Prakasha3007/NUGET-/.github/workflows/npm-reusable-workflow.yml@main
+        uses: Prakasha3007/NUGET/.github/workflows/npm-reusable-workflow.yml@main
         with:
           runsOn: self-hosted
           command: "custom"
@@ -29,7 +29,7 @@ jobs:
       # Step 1: Execute the V2-Copy-Files reusable workflow
       - name: Copy Files
         #uses: ./.github/workflows/copy-reusable-workflow.yml
-        uses: Prakasha3007/NUGET-/.github/workflows/copy-reusable-workflow.yml@main
+        uses: Prakasha3007/NUGET/.github/workflows/copy-reusable-workflow.yml@main
         with:
           SourceFolder: sourcefolder
           contents: '*.txt'
