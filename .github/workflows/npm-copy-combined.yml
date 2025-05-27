@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  #workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   call-reusable:
@@ -16,7 +16,7 @@ jobs:
 
       # Step 2: Execute the call-reusable reusable workflow
       - name: Run NPM Task
-        uses: ./.github/workflows/combined-reusable-NVM.yml
+        uses: ./.github/workflows/npm-reusable-workflow.yml
         with:
           runsOn: self-hosted
           command: "custom"
