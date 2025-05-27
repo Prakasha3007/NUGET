@@ -64,7 +64,7 @@ jobs:
       - name: Display npm version
         shell: pwsh
         run: |
-          $npmVersion = npm -v
+          $npmVersion = "npm -v"
           Write-Host "The installed npm version is: $npmVersion"
           
         # Configure NPM for Custom Registry using PowerShell
