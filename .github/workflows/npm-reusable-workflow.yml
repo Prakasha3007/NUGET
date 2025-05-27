@@ -61,6 +61,12 @@ jobs:
             Write-Host "Version     : v1"
             Write-Host "======================================================================="
 
+      - name: Display npm version
+        shell: pwsh
+        run: |
+          $npmVersion = npm -v
+          Write-Host "The installed npm version is: $npmVersion"
+          
         # Configure NPM for Custom Registry using PowerShell
       - name: Configure NPM for Custom Registry
         if: ${{ inputs.customRegistry != '' }}
