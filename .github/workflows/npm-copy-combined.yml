@@ -11,7 +11,7 @@ jobs:
     uses: ./.github/workflows/npm-reusable-workflow.yml
     with:
       runsOn: self-hosted
-      command: "custom"
+      command: "install"
       workingDir: "./npm-scripts"
       verbose: true
       customCommand: "run build:fonts"
