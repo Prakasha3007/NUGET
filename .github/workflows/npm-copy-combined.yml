@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-reusable:
+  call-NPM-install-reusable:
     uses: ./.github/workflows/npm-reusable-workflow.yml
     with:
       runsOn: self-hosted
@@ -17,8 +17,19 @@ jobs:
       customCommand: "run build:fonts"
       customRegistry: "https://registry.npmjs.org/"
 
+  call-npm-build-reusable:
+    needs: call-NPM-install-reusable
+    uses: ./.github/workflows/npm-reusable-workflow.yml
+    with:
+      runsOn: self-hosted
+      command: "custom"
+      workingDir: "./npm-scripts"
+      verbose: true
+      customCommand: "run build:fonts"
+      customRegistry: "https://registry.npmjs.org/"    
+
   V2-Copy-Files:
-    needs: call-reusable
+    needs: call-npm-build-reusable
     uses: ./.github/workflows/copy-reusable-workflow.yml
     with:
       SourceFolder: sourcefolder
