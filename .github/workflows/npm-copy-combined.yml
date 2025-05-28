@@ -7,6 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
+  Checkout:
+    uses: actions/checkout@v4
   call-NPM-install-reusable:
     uses: ./.github/workflows/npm-reusable-workflow.yml
     with:
