@@ -104,13 +104,7 @@ jobs:
       - name: Verify npm Installation
         run: npm --version
 
-       # Use npm list to check dependencies
-      - name: Check installed dependencies
-        shell: pwsh
-        run: |
-          $dependencies = npm list --depth=0
-          Write-Host $dependencies
-          
+         
       - name: Run NPM or Custom Command
         shell: pwsh
         run: |
