@@ -49,17 +49,15 @@ jobs:
      run:
        working-directory: ${{ inputs.workingDir }}
     steps:
-      - name: Check installed dependencies
+      - name: Checkout
         shell: pwsh
         run: |
-          Write-Host "Before Checkout"
-          npm list --depth=0
-        continue-on-error: true
-                    
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          clean: false
+          git clone https://github.com/Prakasha3007/NUGET.git
+          
+      #- name: Checkout Code
+        #uses: actions/checkout@v4
+        #with:
+          #clean: false
           
       - name: Check installed dependencies
         shell: pwsh
