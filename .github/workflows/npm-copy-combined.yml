@@ -26,20 +26,4 @@ jobs:
       workingDir: "./npm-scripts"
       verbose: true
       customCommand: "run build:fonts"
-      customRegistry: "https://registry.npmjs.org/"    
-
-  V2-Copy-Files:
-    needs: call-npm-build-reusable
-    uses: ./.github/workflows/copy-reusable-workflow.yml
-    with:
-      SourceFolder: sourcefolder
-      contents: '*.txt'
-      TargetFolder: targetFolder
-      #TargetFolder: d:\a\NUGET\NUGET\targetFolder\subfolder
-      CleanTargetFolder: true
-      overwrite: false
-      FlattenFolders: false
-      preserveTimestamp: false
-      retryCount: '3'
-      delayBetweenRetries: '5000'
-      ignoreMakeDirErrors: false
+      customRegistry: "https://registry.npmjs.org/"
