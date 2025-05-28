@@ -49,11 +49,22 @@ jobs:
      run:
        working-directory: ${{ inputs.workingDir }}
     steps:
-        
+      - name: Check installed dependencies
+        shell: pwsh
+        run: |
+          Write-Host "Before Checkout"
+          npm list --depth=0
+                    
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           clean: false
+          
+      - name: Check installed dependencies
+        shell: pwsh
+        run: |
+          Write-Host "After Checkout"
+          npm list --depth=0
         
       - name: NPM Task Header
         run: |
