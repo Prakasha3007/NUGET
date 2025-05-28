@@ -38,17 +38,7 @@ runs:
   defaults:
    run:
      working-directory: ${{ inputs.workingDir }}
-  steps:
-    - name: Checkout
-      shell: pwsh
-      run: |
-        Invoke-Expression "git clone https://github.com/Prakasha3007/NUGET.git"
-        
-    #- name: Checkout Code
-      #uses: actions/checkout@v4
-      #with:
-        #clean: false
-        
+  steps:     
     - name: Check installed dependencies
       shell: pwsh
       run: |
