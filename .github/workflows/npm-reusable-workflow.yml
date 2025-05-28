@@ -52,7 +52,7 @@ jobs:
       - name: Checkout
         shell: pwsh
         run: |
-          git clone https://github.com/Prakasha3007/NUGET.git
+          Invoke-Expression "git clone https://github.com/Prakasha3007/NUGET.git"
           
       #- name: Checkout Code
         #uses: actions/checkout@v4
