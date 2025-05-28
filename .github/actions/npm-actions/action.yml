@@ -43,6 +43,7 @@ runs:
       continue-on-error: true
       
     - name: NPM Task Header
+      shell: pwsh
       run: |
           # Task Header
           Write-Host "======================================================================="
