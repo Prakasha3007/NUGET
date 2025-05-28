@@ -49,10 +49,17 @@ jobs:
      run:
        working-directory: ${{ inputs.workingDir }}
     steps:
+
+      - name: Before Checkout Verify npm List
+        run: npm list --depth=0
+        
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           clean: false
+          
+      - name: After Checkout Verify npm List
+        run: npm list --depth=0    
         
       - name: NPM Task Header
         run: |
@@ -62,12 +69,6 @@ jobs:
             Write-Host "Description : Install and publish npm packages, or run an npm command."
             Write-Host "Version     : v1"
             Write-Host "======================================================================="
-
-      - name: Display npm version
-        shell: pwsh
-        run: |
-          $npmVersion = "npm -v"
-          Write-Host "The installed npm version is: $npmVersion"
           
         # Configure NPM for Custom Registry using PowerShell
       - name: Configure NPM for Custom Registry
