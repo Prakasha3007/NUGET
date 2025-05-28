@@ -11,7 +11,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
   call-NPM-install-reusable:
     uses: ./.github/workflows/npm-reusable-workflow.yml
     with:
