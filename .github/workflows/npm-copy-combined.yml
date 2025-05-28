@@ -23,7 +23,8 @@ jobs:
     with:
       SourceFolder: sourcefolder
       contents: '*.txt'
-      TargetFolder: targetFolder
+      #TargetFolder: targetFolder
+      TargetFolder: d:\a\NUGET\NUGET\targetFolder\subfolder
       CleanTargetFolder: true
       overwrite: false
       FlattenFolders: false
