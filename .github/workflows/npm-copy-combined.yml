@@ -1,3 +1,4 @@
+name: NPM Main Workflow
 on:
   push:
     branches:
