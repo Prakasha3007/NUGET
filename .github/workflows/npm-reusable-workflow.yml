@@ -54,13 +54,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           clean: false
-          
-      # Use npm list to check dependencies
-      - name: Check installed dependencies
-        shell: pwsh
-        run: |
-          $dependencies = npm list --depth=0
-          Write-Host $dependencies
         
       - name: NPM Task Header
         run: |
@@ -134,3 +127,10 @@ jobs:
             Write-Error "An error occurred while executing the npm logic: $_"
             exit 1
           }
+
+      # Use npm list to check dependencies
+      - name: Check installed dependencies
+        shell: pwsh
+        run: |
+          $dependencies = npm list --depth=0
+          Write-Host $dependencies
