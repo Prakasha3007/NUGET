@@ -8,10 +8,6 @@ name: npm
 description: npm action testing
 
 inputs:
-  runsOn:
-    description: 'Specifies the runner to be used (e.g., windows-latest, ubuntu-latest)'
-    required: true
-    type: string
   command:
     description: 'Specifies the NPM command to be executed. Examples: "install" for installing dependencies'
     required: true
@@ -35,9 +31,9 @@ inputs:
 
 runs:
   using: 'composite'
-  defaults:
-   run:
-     working-directory: ${{ inputs.workingDir }}
+#  defaults:
+#   run:
+#     working-directory: ${{ inputs.workingDir }}
   steps:     
     - name: Check installed dependencies
       shell: pwsh
@@ -57,6 +53,7 @@ runs:
         
       # Configure NPM for Custom Registry using PowerShell
     - name: Configure NPM for Custom Registry
+      working-directory: ${{ inputs.workingDir }}
       if: ${{ inputs.customRegistry != '' }}
       shell: pwsh
       run: |
@@ -67,8 +64,6 @@ runs:
   
             # Set the username and password for the registry
             Write-Host "Setting username and password for ${{ inputs.customRegistry }}"
-            #npm config set //${{ inputs.customRegistry }}/:username=${{ secrets.nexus_username }}
-            #npm config set //${{ inputs.customRegistry }}/:password=${{ secrets.nexus_password }}
     
             # Display the current NPM configuration
             npm config ls
@@ -79,12 +74,10 @@ runs:
             exit 1
         }
   
-    - name: Verify npm Installation
-      run: npm --version
-  
        
     - name: Run NPM or Custom Command
       shell: pwsh
+      working-directory: ${{ inputs.workingDir }}
       run: |
         try {      
           # Validate command is allowed
