@@ -112,7 +112,7 @@ jobs:
 
             if (Test-Path -Path $target) {
               Write-Host "Target folder exists. Cleaning the folder: $target"
-              Remove-Item -Path $target -Recurse -Force
+              #Remove-Item -Path $target -Recurse -Force
             } else {
               Write-Host "Target folder does not exist. Creating directory: $target"
               New-Item -ItemType Directory -Path $target | Out-Null
