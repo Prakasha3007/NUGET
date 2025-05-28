@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
  
       - name: NPM Install
-        uses: ./.github/actions/npm-runner
+        uses: ./.github/actions/npm-actions
         with:
           command: "install"
           workingDir: "./npm-scripts"
@@ -20,7 +20,7 @@ jobs:
           customRegistry: "https://registry.npmjs.org/"
  
       - name: NPM Build Fonts
-        uses: ./.github/actions/npm-runner
+        uses: ./.github/actions/npm-actions
         with:
           command: "custom"
           workingDir: "./npm-scripts"
