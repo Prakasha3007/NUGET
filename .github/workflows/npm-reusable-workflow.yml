@@ -49,21 +49,18 @@ jobs:
      run:
        working-directory: ${{ inputs.workingDir }}
     steps:
-
-      # Use npm list to check dependencies
-      - name: Check installed dependencies
-        shell: pwsh
-        run: |
-          $dependencies = npm list --depth=0
-          Write-Host $dependencies
         
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           clean: false
           
-      - name: After Checkout Verify npm List
-        run: npm list
+      # Use npm list to check dependencies
+      - name: Check installed dependencies
+        shell: pwsh
+        run: |
+          $dependencies = npm list --depth=0
+          Write-Host $dependencies
         
       - name: NPM Task Header
         run: |
