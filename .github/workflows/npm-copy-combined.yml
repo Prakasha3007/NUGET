@@ -1,4 +1,4 @@
-name: Main Workflow with Combined Steps
+name: Main Workflow with Two Jobs
 
 on:
   push:
@@ -7,46 +7,39 @@ on:
   workflow_dispatch:
 
 jobs:
-  combined-job:
-    runs-on: self-hosted
-    steps:
-      # Checkout the repository
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  call-NPM-install-reusable:
+    uses: ./.github/workflows/npm-reusable-workflow.yml
+    with:
+      runsOn: self-hosted
+      command: "install"
+      workingDir: "./npm-scripts"
+      verbose: true
+      customCommand: "run build:fonts"
+      customRegistry: "https://registry.npmjs.org/"
 
-      # Step 1: NPM Install
-      - name: NPM Install
-        uses: ./.github/workflows/npm-reusable-workflow.yml
-        with:
-          runsOn: self-hosted
-          command: "install"
-          workingDir: "./npm-scripts"
-          verbose: true
-          customCommand: "run build:fonts"
-          customRegistry: "https://registry.npmjs.org/"
+  call-npm-build-reusable:
+    needs: call-NPM-install-reusable
+    uses: ./.github/workflows/npm-reusable-workflow.yml
+    with:
+      runsOn: self-hosted
+      command: "custom"
+      workingDir: "./npm-scripts"
+      verbose: true
+      customCommand: "run build:fonts"
+      customRegistry: "https://registry.npmjs.org/"    
 
-      # Step 2: NPM Build
-      - name: NPM Build
-        uses: ./.github/workflows/npm-reusable-workflow.yml
-        with:
-          runsOn: self-hosted
-          command: "custom"
-          workingDir: "./npm-scripts"
-          verbose: true
-          customCommand: "run build:fonts"
-          customRegistry: "https://registry.npmjs.org/"
-
-      # Step 3: Copy Files
-      - name: Copy Files
-        uses: ./.github/workflows/copy-reusable-workflow.yml
-        with:
-          SourceFolder: sourcefolder
-          contents: '*.txt'
-          TargetFolder: targetFolder
-          CleanTargetFolder: true
-          overwrite: false
-          FlattenFolders: false
-          preserveTimestamp: false
-          retryCount: '3'
-          delayBetweenRetries: '5000'
-          ignoreMakeDirErrors: false
+  V2-Copy-Files:
+    needs: call-npm-build-reusable
+    uses: ./.github/workflows/copy-reusable-workflow.yml
+    with:
+      SourceFolder: sourcefolder
+      contents: '*.txt'
+      TargetFolder: targetFolder
+      #TargetFolder: d:\a\NUGET\NUGET\targetFolder\subfolder
+      CleanTargetFolder: true
+      overwrite: false
+      FlattenFolders: false
+      preserveTimestamp: false
+      retryCount: '3'
+      delayBetweenRetries: '5000'
+      ignoreMakeDirErrors: false
